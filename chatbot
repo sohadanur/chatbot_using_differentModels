@@ -1,0 +1,21 @@
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Load model and tokenizer
+model_name = "facebook/opt-1.3b"  # Change this to your preferred model
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# Chatbot loop
+def chatbot():
+    print("Welcome to the AI chatbot! Type 'exit' to quit.")
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() == "exit":
+            break
+        inputs = tokenizer(user_input, return_tensors="pt")
+        outputs = model.generate(inputs["input_ids"], max_length=200)
+        response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        print("Bot:", response)
+
+if __name__ == "__main__":
+    chatbot()
